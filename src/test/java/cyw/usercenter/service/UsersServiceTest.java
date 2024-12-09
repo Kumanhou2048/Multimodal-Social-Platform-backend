@@ -37,7 +37,8 @@ public class UsersServiceTest {
     public void testUpdateUser(){
         // 假设有一个 UpdateWrapper 对象，设置更新条件为 userAccount='22331009'，更新字段为 userRole=1
         UpdateWrapper<Users> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("userAccount", "22331009").set("userRole", 1);
+        updateWrapper.eq("userAccount", 22331005).set("username", "独行侠总冠军");
+        updateWrapper.eq("userAccount", 22331005).set("gender", 0);
         boolean result = usersService.update(updateWrapper); // 调用 update 方法
         if (result) {
             System.out.println("Record updated successfully.");
@@ -45,4 +46,6 @@ public class UsersServiceTest {
             System.out.println("Failed to update record.");
         }
     }
+
+
 }

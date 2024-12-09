@@ -18,4 +18,6 @@ public interface UsersService extends IService<Users> {
     int userLogout(HttpServletRequest request);
 
     int userResetPassword(String userAccount,String userPassword,String checkPassword);
+
+    int userUpdateUserInfo(String userAccount,String username,String gender);
 }

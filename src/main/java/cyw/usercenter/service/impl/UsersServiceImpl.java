@@ -67,7 +67,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         queryWrapper.eq("userAccount", userAccount);
         long count = this.count(queryWrapper);
         if(count>0){
-            return -1;
+            return -2;//账号已经存在
         }
         //2.加密
         //2.加密 - 使用SHA-256加密并Base64编码
@@ -75,7 +75,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         //3.插入数据
         Users user = new Users();
         user.setUsername(username);
-        if(gender=="男"){
+        if(gender.equals("男")){
             user.setGender(0);
         }else{
             user.setGender(1);
@@ -90,16 +90,20 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
     public Users userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         //1.校验
         if(StringUtils.isAnyBlank(userAccount,userPassword)){
+            request.setAttribute("errorMessage", "账号或密码不能为空");
             return null;
         }
         if(userAccount.length()<3||userAccount.length()>10){
+            request.setAttribute("errorMessage", "账号长度需在3到10个字符之间");
             return null;
         }
         if(userPassword.length()<6||userPassword.length()>20){
+            request.setAttribute("errorMessage", "密码长度需在6到20个字符之间");
             return null;
         }
         //账号没有特殊字符
         if (!userAccount.matches("[a-zA-Z0-9\u4e00-\u9fa5]+")){
+            request.setAttribute("errorMessage", "账号只能包含字母、数字或汉字");
             return null;
         }
         //2.加密
@@ -110,6 +114,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         queryWrapper.eq("userPassword", newPassword);
         Users user=this.getOne(queryWrapper);
         if(user==null) {
+            request.setAttribute("errorMessage", "账号不存在");
             log.info("login in fail");
             return null;
         }
@@ -146,7 +151,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         Users user=this.getOne(queryWrapper);
         if(user==null) {
             log.info("userAccount not exist");
-            return -1;
+            return -2;//表明账号不存在
         }
         //加密新密码
         String newPassword = hashPassword(userPassword);
@@ -161,6 +166,20 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
             System.out.println(userAccount+"Failed to reset password.");
             return -1;
         }
+    }
+
+    @Override
+    public int userUpdateUserInfo(String userAccount, String username, String gender) {
+        int genderValue=1;
+        if(gender.equals("男")){
+            genderValue=0;
+        }
+        //根据账号，更新用户信息
+        UpdateWrapper<Users> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("userAccount", userAccount).set("username", username);
+        updateWrapper.eq("userAccount", userAccount).set("gender", genderValue);
+        boolean result = this.update(updateWrapper); // 调用 update 方法
+        return 1;
     }
 }
 

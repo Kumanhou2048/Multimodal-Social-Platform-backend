@@ -5,6 +5,7 @@ import cyw.usercenter.model.domain.Users;
 import cyw.usercenter.model.request.UserLoginRequest;
 import cyw.usercenter.model.request.UserRegistRequest;
 import cyw.usercenter.model.request.UserResetPasswordRequest;
+import cyw.usercenter.model.request.UserUpdateRequest;
 import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -112,4 +113,16 @@ public class UserController {
         String checkPassword=userResetPasswordRequest.getCheckPassword();
         return usersService.userResetPassword(userAccount,userPassword,checkPassword);
     }
+
+    @PostMapping("/update")
+    public int userInfoUpdate(@RequestBody UserUpdateRequest userUpdateRequest) {
+        if(userUpdateRequest==null){
+            return 0;
+        }
+        String userAccount=userUpdateRequest.getUserAccount();
+        String username=userUpdateRequest.getUsername();
+        String gender=userUpdateRequest.getGender();
+        return usersService.userUpdateUserInfo(userAccount,username,gender);
+    }
+
 }
