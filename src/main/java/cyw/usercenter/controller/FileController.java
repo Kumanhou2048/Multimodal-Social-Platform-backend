@@ -26,7 +26,7 @@ public class FileController {
     @Resource
     private UsersService usersService;
 
-    @PostMapping("/upload")
+    @PostMapping("/uploadAvatar")
     public String uploadAvatar(@RequestParam MultipartFile file, @RequestParam String userAccount) {
         //取得原文件后缀名
         String originalFilename = file.getOriginalFilename();
