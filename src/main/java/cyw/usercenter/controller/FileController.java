@@ -49,7 +49,7 @@ public class FileController {
         String oldAvatarUrl = user.getAvatarUrl();
 
         // 删除本地旧头像文件
-        if (oldAvatarUrl != null && !oldAvatarUrl.isEmpty()) {
+        if (oldAvatarUrl != null && !oldAvatarUrl.isEmpty() && !"/avatar/default.png".equals(oldAvatarUrl)) {
             String oldFilePath = savePath + oldAvatarUrl.replace("/avatar/", "");
             File oldFile = new File(oldFilePath);
             if (oldFile.exists() && oldFile.isFile()) {
