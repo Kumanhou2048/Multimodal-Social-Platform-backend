@@ -12,6 +12,10 @@ import lombok.Data;
  * 
  * @TableName notes
  */
+
+//其中noteType 0代表图文，1代表视频
+//noteStatus 0代表待审核，1代表审核通过
+
 @TableName(value ="notes")
 @Data
 public class Notes implements Serializable {

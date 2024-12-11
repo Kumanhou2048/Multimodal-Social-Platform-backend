@@ -26,6 +26,7 @@ public class FileController {
     @Resource
     private UsersService usersService;
 
+
     @PostMapping("/uploadAvatar")
     public String uploadAvatar(@RequestParam MultipartFile file, @RequestParam String userAccount) {
         //取得原文件后缀名
@@ -75,5 +76,30 @@ public class FileController {
 
     }
 
+    @PostMapping("/uploadImage")
+    public String uploadImage(@RequestParam MultipartFile file) {
+        //取得原文件后缀名
+        String originalFilename = file.getOriginalFilename();
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+        //用uuid＋后缀名重新生成文件名
+        String newFileName = UUID.randomUUID().toString() + suffix;
+
+        //检查存储目录是否存在
+        File dest = new File(savePath + newFileName);
+        if(!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+
+        try {
+            file.transferTo(dest);
+            //返回图片的相对url地址
+            return "/avatar/" + newFileName;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return "failed";
+        }
+
+    }
 
 }

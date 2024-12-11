@@ -1,9 +1,9 @@
-package generator.service.impl;
+package cyw.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import generator.domain.Images;
-import generator.service.ImagesService;
-import generator.mapper.ImagesMapper;
+import cyw.usercenter.model.domain.Images;
+import cyw.usercenter.service.ImagesService;
+import cyw.usercenter.Mapper.ImagesMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImagesServiceImpl extends ServiceImpl<ImagesMapper, Images>
     implements ImagesService{
-
 }
 
 

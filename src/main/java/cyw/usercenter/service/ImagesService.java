@@ -1,7 +1,7 @@
-package generator.service;
+package cyw.usercenter.service;
 
-import generator.domain.Images;
 import com.baomidou.mybatisplus.extension.service.IService;
+import cyw.usercenter.model.domain.Images;
 
 /**
 * @author 陈誉文

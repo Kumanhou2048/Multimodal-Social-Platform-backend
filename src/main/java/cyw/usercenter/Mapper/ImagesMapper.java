@@ -1,7 +1,7 @@
-package generator.mapper;
+package cyw.usercenter.Mapper;
 
-import generator.domain.Images;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import cyw.usercenter.model.domain.Images;
 
 /**
 * @author 陈誉文
