@@ -2,6 +2,7 @@ package cyw.usercenter.service;
 
 import cyw.usercenter.model.domain.Notes;
 import com.baomidou.mybatisplus.extension.service.IService;
+import cyw.usercenter.model.request.GetBriefNotesRequest;
 
 import java.util.List;
 
@@ -13,4 +14,12 @@ import java.util.List;
 public interface NotesService extends IService<Notes> {
 
      int setNewNote(String useraccount, String title, String content, int noteType, int imagecount, List<String> imageUrl);
+
+     List<GetBriefNotesRequest> getHomePageNotes(int index);
+
+     int getTotalPostsCount();
+
+     List<GetBriefNotesRequest> getSearchPageNotes(String keywords);
+
+     int getTotalSearchPostsCount(String keywords);
 }

@@ -1,19 +1,18 @@
 package cyw.usercenter.controller;
 
+import cyw.usercenter.model.domain.Notes;
 import cyw.usercenter.model.request.NotesUploadRequest;
-import cyw.usercenter.model.request.UserRegistRequest;
+import cyw.usercenter.model.request.GetBriefNotesRequest;
+import cyw.usercenter.model.request.getPageRequest;
 import cyw.usercenter.service.NotesService;
-import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -49,6 +48,47 @@ public class NotesController {
         }
 
         return "笔记上传成功";
+    }
+
+    @PostMapping("/getHomePagePost")
+    public List<GetBriefNotesRequest> getHomePage(@RequestBody getPageRequest request) {
+        int index = request.getIndex();
+        if(index < 0){
+            System.out.println("index is less than 0");
+            return null;
+        }
+        List<GetBriefNotesRequest> HomePageNotes;
+        HomePageNotes = notesService.getHomePageNotes(index);
+        if(HomePageNotes == null){
+            System.out.println("请求的笔记数量超限！");
+            return null;
+        }
+        return HomePageNotes;
+    }
+
+    @GetMapping ("/getTotalPosts")
+    public int getTotalPosts() {
+        return notesService.getTotalPostsCount();
+    }
+
+    @PostMapping("/getSearchPagePost")
+    public List<GetBriefNotesRequest> getSearchPagePost(@RequestBody getPageRequest request) {
+        String key = request.getKey();
+        if(key.isEmpty()){
+            System.out.println("key is empty or index is less than 1");
+            return null;
+        }
+        return notesService.getSearchPageNotes(key);
+    }
+
+    @PostMapping("/getTotalSearchPosts")
+    public int getTotalSearchPosts(@RequestBody getPageRequest request) {
+        String key = request.getKey();
+        if(key.isEmpty()){
+            System.out.println("key is empty");
+            return 0;
+        }
+        return notesService.getTotalSearchPostsCount(key);
     }
 
 }

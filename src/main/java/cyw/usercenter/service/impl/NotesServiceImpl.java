@@ -1,15 +1,20 @@
 package cyw.usercenter.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.huaban.analysis.jieba.JiebaSegmenter;
 import cyw.usercenter.model.domain.Images;
 import cyw.usercenter.model.domain.Notes;
+import cyw.usercenter.model.domain.Users;
+import cyw.usercenter.model.request.GetBriefNotesRequest;
 import cyw.usercenter.service.ImagesService;
 import cyw.usercenter.service.NotesService;
 import cyw.usercenter.Mapper.NotesMapper;
+import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +28,8 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
     implements NotesService{
     @Resource
     ImagesService imagesService;
+    @Resource
+    UsersService usersService;
 
     @Override
     public int setNewNote(String useraccount, String title, String content, int noteType, int imageCount, List<String> imageUrl) {
@@ -60,6 +67,114 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
 
         return noteId;
     }
+
+    @Override
+    public List<GetBriefNotesRequest> getHomePageNotes(int index) {
+        QueryWrapper<Notes> qW1 = new QueryWrapper<Notes>();
+        qW1.orderByDesc("uploadTime");
+        List<Notes> allNotes = this.list(qW1);
+        List<GetBriefNotesRequest> HomePageNotes = new ArrayList<GetBriefNotesRequest>();
+        for(int i=(index)*12; i<(index+1)*12; i++) {
+            if(i >= allNotes.size()) {
+                break;
+            }
+            Notes note = allNotes.get(i);
+            GetBriefNotesRequest getBriefNotesRequest = new GetBriefNotesRequest();
+            getBriefNotesRequest.setId(note.getId());
+            getBriefNotesRequest.setTitle(note.getTitle());
+            getBriefNotesRequest.setLikes(note.getLikes());
+
+            //从user获取头像url和用户名
+            String useraccount = note.getUserAccount();
+            QueryWrapper<Users> qW2 = new QueryWrapper<>();
+            qW2.eq("userAccount", useraccount);
+            Users user = usersService.getOne(qW2);
+            getBriefNotesRequest.setUsername(user.getUsername());
+            getBriefNotesRequest.setAvatarImageUrl(user.getAvatarUrl());
+
+            //从images表获取第一张图片作为封面
+            QueryWrapper<Images> qW3 = new QueryWrapper<>();
+            qW3.eq("noteId", note.getId());
+            qW3.eq("imageIndex", 1);
+            Images image = imagesService.getOne(qW3);
+            if(image == null)
+                getBriefNotesRequest.setImageUrl(null);
+            else
+                getBriefNotesRequest.setImageUrl(image.getImageUrl());
+
+            HomePageNotes.add(getBriefNotesRequest);
+        }
+        if(HomePageNotes.isEmpty()) {
+            HomePageNotes = null;
+            System.out.println("index is tobig");
+        }
+        return HomePageNotes;
+    }
+
+    @Override
+    public int getTotalPostsCount() {
+        List<Notes> allNotes = this.list();
+        return allNotes.size();
+    }
+
+    @Override
+    public List<GetBriefNotesRequest> getSearchPageNotes(String keywords) {
+        JiebaSegmenter Segmenter = new JiebaSegmenter();
+        List<String> keys = Segmenter.sentenceProcess(keywords);
+
+        QueryWrapper<Notes> qW1 = new QueryWrapper<>();
+        qW1.orderByDesc("uploadTime");
+        keys.forEach(keyword -> qW1.or().like("title", keyword).or().like("content", keyword));
+        List<Notes> allNotes = this.list(qW1);
+        if(allNotes.isEmpty()) {
+            System.out.println("没有对应查询结果！");
+            return null;
+        }
+
+        List<GetBriefNotesRequest> searchRequests = new ArrayList<>();
+        for(Notes note : allNotes) {
+            GetBriefNotesRequest getBriefNotesRequest = new GetBriefNotesRequest();
+            getBriefNotesRequest.setId(note.getId());
+            getBriefNotesRequest.setTitle(note.getTitle());
+            getBriefNotesRequest.setLikes(note.getLikes());
+
+            //从user获取头像url和用户名
+            String useraccount = note.getUserAccount();
+            QueryWrapper<Users> qW2 = new QueryWrapper<>();
+            qW2.eq("userAccount", useraccount);
+            Users user = usersService.getOne(qW2);
+            getBriefNotesRequest.setUsername(user.getUsername());
+            getBriefNotesRequest.setAvatarImageUrl(user.getAvatarUrl());
+
+            //从images表获取第一张图片作为封面
+            QueryWrapper<Images> qW3 = new QueryWrapper<>();
+            qW3.eq("noteId", note.getId());
+            qW3.eq("imageIndex", 1);
+            Images image = imagesService.getOne(qW3);
+            getBriefNotesRequest.setImageUrl(image.getImageUrl());
+
+            searchRequests.add(getBriefNotesRequest);
+        }
+
+        if(searchRequests.isEmpty()) {
+            System.out.println("index is too big");
+        }
+        return searchRequests;
+    }
+
+    @Override
+    public int getTotalSearchPostsCount(String keywords) {
+        JiebaSegmenter Segmenter = new JiebaSegmenter();
+        List<String> keys = Segmenter.sentenceProcess(keywords);
+
+        QueryWrapper<Notes> qW1 = new QueryWrapper<>();
+        keys.forEach(keyword -> qW1.or().like("title", keyword).or().like("content", keyword));
+        List<Notes> allNotes = this.list(qW1);
+
+        return allNotes.size();
+    }
+
+
 }
 
 
