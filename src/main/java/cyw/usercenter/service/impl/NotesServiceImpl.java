@@ -7,6 +7,7 @@ import cyw.usercenter.model.domain.Images;
 import cyw.usercenter.model.domain.Notes;
 import cyw.usercenter.model.domain.Users;
 import cyw.usercenter.model.request.GetBriefNotesRequest;
+import cyw.usercenter.model.request.GetDetailedNotesRequest;
 import cyw.usercenter.service.ImagesService;
 import cyw.usercenter.service.NotesService;
 import cyw.usercenter.Mapper.NotesMapper;
@@ -74,7 +75,8 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
         qW1.orderByDesc("uploadTime");
         List<Notes> allNotes = this.list(qW1);
         List<GetBriefNotesRequest> HomePageNotes = new ArrayList<GetBriefNotesRequest>();
-        for(int i=(index)*12; i<(index+1)*12; i++) {
+        for(int i=(index-1)*12; i<
+                index*12; i++) {
             if(i >= allNotes.size()) {
                 break;
             }
@@ -173,6 +175,35 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
 
         return allNotes.size();
     }
+
+    @Override
+    public GetDetailedNotesRequest getDetailedNotes(int noteId) {
+        QueryWrapper<Notes> qW1 = new QueryWrapper<>();
+        qW1.eq("id", noteId);
+        Notes note = this.getOne(qW1);
+        if(note == null) {
+            return null;
+        }
+
+        GetDetailedNotesRequest Request = new GetDetailedNotesRequest();
+        Request.setPostContent(note.getContent());
+        Request.setPostTitle(note.getTitle());
+        Request.setPostTime(note.getUploadTime());
+        //获取用户头像和名称
+        String useraccount = note.getUserAccount();
+        QueryWrapper<Users> qW2 = new QueryWrapper<>();
+        qW2.eq("userAccount", useraccount);
+        Users user = usersService.getOne(qW2);
+        if(user == null) {
+            System.out.println("笔记对应的用户不存在！");
+            return null;
+        }
+        Request.setPosterName(user.getUsername());
+        Request.setPosterAvatarUrl(user.getAvatarUrl());
+
+        return Request;
+    }
+
 
 
 }

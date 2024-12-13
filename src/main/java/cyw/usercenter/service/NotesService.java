@@ -3,6 +3,7 @@ package cyw.usercenter.service;
 import cyw.usercenter.model.domain.Notes;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cyw.usercenter.model.request.GetBriefNotesRequest;
+import cyw.usercenter.model.request.GetDetailedNotesRequest;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface NotesService extends IService<Notes> {
      List<GetBriefNotesRequest> getSearchPageNotes(String keywords);
 
      int getTotalSearchPostsCount(String keywords);
+
+     GetDetailedNotesRequest getDetailedNotes(int noteId);
 }

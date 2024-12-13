@@ -1,16 +1,12 @@
 package cyw.usercenter.controller;
 
-import cyw.usercenter.model.domain.Notes;
-import cyw.usercenter.model.request.NotesUploadRequest;
-import cyw.usercenter.model.request.GetBriefNotesRequest;
-import cyw.usercenter.model.request.getPageRequest;
+import cyw.usercenter.model.request.*;
 import cyw.usercenter.service.NotesService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,8 +49,8 @@ public class NotesController {
     @PostMapping("/getHomePagePost")
     public List<GetBriefNotesRequest> getHomePage(@RequestBody getPageRequest request) {
         int index = request.getIndex();
-        if(index < 0){
-            System.out.println("index is less than 0");
+        if(index < 1){
+            System.out.println("index is less than 1");
             return null;
         }
         List<GetBriefNotesRequest> HomePageNotes;
@@ -89,6 +85,12 @@ public class NotesController {
             return 0;
         }
         return notesService.getTotalSearchPostsCount(key);
+    }
+
+    @PostMapping("/getPostDetail")
+    public GetDetailedNotesRequest getPostDetail(@RequestBody simpleRequest request) {
+        int id = request.getId();
+        return notesService.getDetailedNotes(id);
     }
 
 }

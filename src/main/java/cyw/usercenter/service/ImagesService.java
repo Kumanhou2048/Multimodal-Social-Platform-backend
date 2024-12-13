@@ -2,6 +2,9 @@ package cyw.usercenter.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import cyw.usercenter.model.domain.Images;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
 * @author 陈誉文
@@ -9,5 +12,5 @@ import cyw.usercenter.model.domain.Images;
 * @createDate 2024-12-11 10:48:50
 */
 public interface ImagesService extends IService<Images> {
-
+    List<String> getPostPicture(int postId);
 }

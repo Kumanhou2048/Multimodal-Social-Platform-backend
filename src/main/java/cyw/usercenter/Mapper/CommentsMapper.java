@@ -1,13 +1,13 @@
-package generator.mapper;
+package cyw.usercenter.Mapper;
 
-import generator.domain.Comments;
+import cyw.usercenter.model.domain.Comments;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
 * @author 陈誉文
 * @description 针对表【comments】的数据库操作Mapper
 * @createDate 2024-12-13 15:10:04
-* @Entity generator.domain.Comments
+* @Entity cyw.usercenter.model.domain.Comments
 */
 public interface CommentsMapper extends BaseMapper<Comments> {
 

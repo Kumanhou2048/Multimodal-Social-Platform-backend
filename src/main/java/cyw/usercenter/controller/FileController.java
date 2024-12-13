@@ -4,6 +4,8 @@ package cyw.usercenter.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import cyw.usercenter.model.domain.Users;
+import cyw.usercenter.model.request.simpleRequest;
+import cyw.usercenter.service.ImagesService;
 import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +28,9 @@ public class FileController {
 
     @Resource
     private UsersService usersService;
+
+    @Resource
+    private ImagesService imagesService;
 
 
     @PostMapping("/uploadAvatar")
@@ -50,7 +56,7 @@ public class FileController {
         String oldAvatarUrl = user.getAvatarUrl();
 
         // 删除本地旧头像文件
-        if (oldAvatarUrl != null && !oldAvatarUrl.isEmpty() && !"/avatar/default.png".equals(oldAvatarUrl)) {
+        if (oldAvatarUrl != null && !oldAvatarUrl.isEmpty() && !"/avatar/Kuman.png".equals(oldAvatarUrl)) {
             String oldFilePath = savePath + oldAvatarUrl.replace("/avatar/", "");
             File oldFile = new File(oldFilePath);
             if (oldFile.exists() && oldFile.isFile()) {
@@ -100,6 +106,12 @@ public class FileController {
             return "failed";
         }
 
+    }
+
+    @PostMapping("/getPostPicture")
+    public List<String> getPostPicture(@RequestBody simpleRequest request) {
+        int id = request.getId();
+        return imagesService.getPostPicture(id);
     }
 
 }
