@@ -25,4 +25,8 @@ public interface NotesService extends IService<Notes> {
      int getTotalSearchPostsCount(String keywords);
 
      GetDetailedNotesRequest getDetailedNotes(int noteId);
+
+     List<GetBriefNotesRequest> getUserNotes(int index,String userAccount);
+
+     int deleteNote(int noteId);
 }

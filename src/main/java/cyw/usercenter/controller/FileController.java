@@ -4,6 +4,7 @@ package cyw.usercenter.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import cyw.usercenter.model.domain.Users;
+import cyw.usercenter.model.request.ImageUploadResult;
 import cyw.usercenter.model.request.simpleRequest;
 import cyw.usercenter.service.ImagesService;
 import cyw.usercenter.service.UsersService;
@@ -83,29 +84,28 @@ public class FileController {
     }
 
     @PostMapping("/uploadImage")
-    public String uploadImage(@RequestParam MultipartFile file) {
+    public ImageUploadResult uploadImage(@RequestParam MultipartFile file) {
         //取得原文件后缀名
         String originalFilename = file.getOriginalFilename();
         String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-
         //用uuid＋后缀名重新生成文件名
         String newFileName = UUID.randomUUID().toString() + suffix;
-
         //检查存储目录是否存在
         File dest = new File(savePath + newFileName);
         if(!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
-
+        ImageUploadResult imageUploadResult = new ImageUploadResult();
         try {
             file.transferTo(dest);
             //返回图片的相对url地址
-            return "/avatar/" + newFileName;
+            imageUploadResult.setUrl("/avatar/" + newFileName);
+            return imageUploadResult;
         }catch (Exception e) {
             e.printStackTrace();
-            return "failed";
+            imageUploadResult.setErrorMessage("保存失败");
+            return imageUploadResult;
         }
-
     }
 
     @PostMapping("/getPostPicture")

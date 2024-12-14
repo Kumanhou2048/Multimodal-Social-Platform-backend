@@ -25,4 +25,4 @@ mybatis-plus:
 
 files:
   uploads:
-    path: C:\Users\czl\WebstormProjects\frontend\public\avatar\
+    path: D:\用户中心\myapp\public\avatar\

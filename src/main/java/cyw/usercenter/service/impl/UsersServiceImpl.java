@@ -171,6 +171,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
     @Override
     public int userUpdateUserInfo(String userAccount, String username, String gender) {
         int genderValue=1;
+        if(StringUtils.isAnyBlank(userAccount,username,gender)){
+            return -1;
+        }
         if(gender.equals("男")){
             genderValue=0;
         }

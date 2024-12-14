@@ -25,12 +25,12 @@ import java.util.List;
 * @createDate 2024-12-10 21:57:59
 */
 @Service
-public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
-    implements NotesService{
+public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implements NotesService{
     @Resource
     ImagesService imagesService;
     @Resource
     UsersService usersService;
+
 
     @Override
     public int setNewNote(String useraccount, String title, String content, int noteType, int imageCount, List<String> imageUrl) {
@@ -92,7 +92,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
             qW2.eq("userAccount", useraccount);
             Users user = usersService.getOne(qW2);
             getBriefNotesRequest.setUsername(user.getUsername());
-            getBriefNotesRequest.setAvatarImageUrl(user.getAvatarUrl());
+            getBriefNotesRequest.setAvatarUrl(user.getAvatarUrl());
 
             //从images表获取第一张图片作为封面
             QueryWrapper<Images> qW3 = new QueryWrapper<>();
@@ -146,7 +146,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
             qW2.eq("userAccount", useraccount);
             Users user = usersService.getOne(qW2);
             getBriefNotesRequest.setUsername(user.getUsername());
-            getBriefNotesRequest.setAvatarImageUrl(user.getAvatarUrl());
+            getBriefNotesRequest.setAvatarUrl(user.getAvatarUrl());
 
             //从images表获取第一张图片作为封面
             QueryWrapper<Images> qW3 = new QueryWrapper<>();
@@ -204,6 +204,83 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>
         return Request;
     }
 
+    @Override
+    public List<GetBriefNotesRequest> getUserNotes(int index, String userAccount) {
+        // 创建查询条件，根据 userAccount 查找帖子
+        QueryWrapper<Notes> qW1 = new QueryWrapper<Notes>();
+        qW1.orderByDesc("uploadTime");
+
+        // 如果 userAccount 不为空，则添加筛选条件
+        if (userAccount != null && !userAccount.isEmpty()) {
+            qW1.eq("userAccount", userAccount);
+        }
+
+        // 获取符合条件的帖子列表
+        List<Notes> allNotes = this.list(qW1);
+
+        // 初始化结果列表
+        List<GetBriefNotesRequest> userNotes = new ArrayList<>();
+
+        // 进行分页处理
+        for (int i = (index - 1) * 12; i < index * 12; i++) {
+            if (i >= allNotes.size()) {
+                break;
+            }
+            Notes note = allNotes.get(i);
+            GetBriefNotesRequest getBriefNotesRequest = new GetBriefNotesRequest();
+            getBriefNotesRequest.setId(note.getId());
+            getBriefNotesRequest.setTitle(note.getTitle());
+            getBriefNotesRequest.setLikes(note.getLikes());
+
+            // 从 user 表获取头像 URL 和用户名
+            String noteUserAccount = note.getUserAccount();
+            QueryWrapper<Users> qW2 = new QueryWrapper<>();
+            qW2.eq("userAccount", noteUserAccount);
+            Users user = usersService.getOne(qW2);
+
+            // 设置用户相关信息
+            if (user != null) {
+                getBriefNotesRequest.setUsername(user.getUsername());
+                getBriefNotesRequest.setAvatarUrl(user.getAvatarUrl());
+            } else {
+                getBriefNotesRequest.setUsername("未知用户");
+                getBriefNotesRequest.setAvatarUrl(null);
+            }
+
+            // 从 images 表获取第一张图片作为封面
+            QueryWrapper<Images> qW3 = new QueryWrapper<>();
+            qW3.eq("noteId", note.getId());
+            qW3.eq("imageIndex", 1);
+            Images image = imagesService.getOne(qW3);
+            if (image == null) {
+                getBriefNotesRequest.setImageUrl(null);
+            } else {
+                getBriefNotesRequest.setImageUrl(image.getImageUrl());
+            }
+
+            // 将结果添加到列表
+            userNotes.add(getBriefNotesRequest);
+        }
+
+        // 如果结果列表为空，设置为 null 并输出提示
+        if (userNotes.isEmpty()) {
+            userNotes = null;
+            System.out.println("index is too big or no notes found for the given userAccount");
+        }
+
+        return userNotes;
+    }
+
+    @Override
+    public int deleteNote(int noteId) {
+        boolean result=this.removeById(noteId);
+        if(result) {
+            return 1;
+        }
+        else {
+            return -1;
+        }
+    }
 
 
 }
