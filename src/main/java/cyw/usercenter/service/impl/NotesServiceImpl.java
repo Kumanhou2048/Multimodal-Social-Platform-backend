@@ -15,6 +15,8 @@ import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -188,7 +190,11 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         GetDetailedNotesRequest Request = new GetDetailedNotesRequest();
         Request.setPostContent(note.getContent());
         Request.setPostTitle(note.getTitle());
-        Request.setPostTime(note.getUploadTime());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = sdf.format(note.getUploadTime());
+        Request.setPostTime(formattedTime);
+
         //获取用户头像和名称
         String useraccount = note.getUserAccount();
         QueryWrapper<Users> qW2 = new QueryWrapper<>();

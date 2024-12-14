@@ -10,7 +10,7 @@ public class NotesUploadRequest implements Serializable {
     String userAccount;
     String title;
     String content;
-    int noteType;
-    int imageCount;
+    int noteType; //0图文，1视频
+    int imageCount; //图片的数量
     List<String> imageUrls;
 }

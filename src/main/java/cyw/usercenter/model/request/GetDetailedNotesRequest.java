@@ -8,7 +8,7 @@ import java.util.Date;
 public class GetDetailedNotesRequest {
     String posterAvatarUrl;
     String posterName;
-    Date postTime;
+    String postTime;
     String postTitle;
     String postContent;
 

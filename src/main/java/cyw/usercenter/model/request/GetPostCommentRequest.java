@@ -9,6 +9,6 @@ public class GetPostCommentRequest {
     String avatarUrl;
     String name;
     String content;
-    Date time;
+    String time;
 
 }

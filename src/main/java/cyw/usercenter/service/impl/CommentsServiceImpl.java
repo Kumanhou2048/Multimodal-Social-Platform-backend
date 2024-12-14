@@ -13,6 +13,7 @@ import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,8 +76,11 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
         List<GetPostCommentRequest> commentlist = new ArrayList<>();
         for(Comments comment : comments){
             GetPostCommentRequest request = new GetPostCommentRequest();
-            request.setTime(comment.getUploadTime());
             request.setContent(comment.getContent());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedTime = sdf.format(comment.getUploadTime());
+            request.setTime(formattedTime);
 
             //查询评论者的头像，名称
             int userId = comment.getUserId();
