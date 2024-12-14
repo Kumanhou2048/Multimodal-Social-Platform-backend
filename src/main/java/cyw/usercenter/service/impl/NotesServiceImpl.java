@@ -211,7 +211,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
     }
 
     @Override
-    public List<GetBriefNotesRequest> getUserNotes(int index, String userAccount) {
+    public List<GetBriefNotesRequest> getUserNotes(String userAccount) {
         // 创建查询条件，根据 userAccount 查找帖子
         QueryWrapper<Notes> qW1 = new QueryWrapper<Notes>();
         qW1.orderByDesc("uploadTime");
@@ -228,11 +228,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         List<GetBriefNotesRequest> userNotes = new ArrayList<>();
 
         // 进行分页处理
-        for (int i = (index - 1) * 12; i < index * 12; i++) {
-            if (i >= allNotes.size()) {
-                break;
-            }
-            Notes note = allNotes.get(i);
+        for (Notes note : allNotes) {
             GetBriefNotesRequest getBriefNotesRequest = new GetBriefNotesRequest();
             getBriefNotesRequest.setId(note.getId());
             getBriefNotesRequest.setTitle(note.getTitle());

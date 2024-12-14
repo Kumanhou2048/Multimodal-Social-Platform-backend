@@ -26,7 +26,7 @@ public interface NotesService extends IService<Notes> {
 
      GetDetailedNotesRequest getDetailedNotes(int noteId);
 
-     List<GetBriefNotesRequest> getUserNotes(int index,String userAccount);
+     List<GetBriefNotesRequest> getUserNotes(String userAccount);
 
      int deleteNote(int noteId);
 }

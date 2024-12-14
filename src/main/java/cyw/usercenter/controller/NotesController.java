@@ -97,27 +97,15 @@ public class NotesController {
 
     @PostMapping("/getUserPost")
     public List<GetBriefNotesRequest> getUserPage(@RequestBody GetUserPostRequest request) {
-        int index = request.getIndex();
+
         String userAccount = request.getUserAccount();
-        if(index < 1){
-            System.out.println("index is less than 1");
-            return null;
-        }
         List<GetBriefNotesRequest> userNotes;
-        userNotes = notesService.getUserNotes(index,userAccount);
+        userNotes = notesService.getUserNotes(userAccount);
         if(userNotes == null){
             System.out.println("请求的笔记数量超限！");
             return null;
         }
         return userNotes;
-    }
-
-    @PostMapping("/getUserTotalPosts")
-    public int getUserTotalPosts(@RequestBody GetUserPostNumRequest request) {
-        String userAccount=request.getUserAccount();
-        QueryWrapper<Notes> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("userAccount",userAccount);
-        return (int)notesService.count(queryWrapper);
     }
 
     @PostMapping("/deleteNote")
