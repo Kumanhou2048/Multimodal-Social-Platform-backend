@@ -2,10 +2,7 @@ package cyw.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import cyw.usercenter.model.domain.Users;
-import cyw.usercenter.model.request.UserLoginRequest;
-import cyw.usercenter.model.request.UserRegistRequest;
-import cyw.usercenter.model.request.UserResetPasswordRequest;
-import cyw.usercenter.model.request.UserUpdateRequest;
+import cyw.usercenter.model.request.*;
 import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -125,4 +122,12 @@ public class UserController {
         return usersService.userUpdateUserInfo(userAccount,username,gender);
     }
 
+    @PostMapping("/getManageUser")
+    public ManagePageUserInfo getMangeUserInfo(@RequestBody GetManagePageUserInfoRequest getManagePageUserInfoRequest) {
+        if(getManagePageUserInfoRequest==null){
+            return null;
+        }
+        String userAccount=getManagePageUserInfoRequest.getUserAccount();
+        return usersService.getManagePageUserInfo(userAccount);
+    }
 }

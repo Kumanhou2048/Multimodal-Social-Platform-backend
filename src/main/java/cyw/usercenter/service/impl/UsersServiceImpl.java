@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cyw.usercenter.model.domain.Users;
+import cyw.usercenter.model.request.ManagePageUserInfo;
 import cyw.usercenter.service.UsersService;
 import cyw.usercenter.Mapper.UsersMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -183,6 +184,22 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         updateWrapper.eq("userAccount", userAccount).set("gender", genderValue);
         boolean result = this.update(updateWrapper); // 调用 update 方法
         return 1;
+    }
+
+    @Override
+    public ManagePageUserInfo getManagePageUserInfo(String userAccount) {
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        Users user=this.getOne(queryWrapper);
+        ManagePageUserInfo managePageUserInfo=new ManagePageUserInfo();
+        if(user==null){
+            managePageUserInfo.setError("没有这个用户");
+        }
+        else{
+            managePageUserInfo.setUserName(user.getUsername());
+            managePageUserInfo.setAvatarUrl(user.getAvatarUrl());
+        }
+        return managePageUserInfo;
     }
 }
 

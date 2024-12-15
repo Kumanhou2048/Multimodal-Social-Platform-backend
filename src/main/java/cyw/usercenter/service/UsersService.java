@@ -2,6 +2,7 @@ package cyw.usercenter.service;
 
 import cyw.usercenter.model.domain.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
+import cyw.usercenter.model.request.ManagePageUserInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -20,4 +21,6 @@ public interface UsersService extends IService<Users> {
     int userResetPassword(String userAccount,String userPassword,String checkPassword);
 
     int userUpdateUserInfo(String userAccount,String username,String gender);
+
+    ManagePageUserInfo getManagePageUserInfo(String userAccount);
 }
