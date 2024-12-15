@@ -77,8 +77,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         qW1.orderByDesc("uploadTime");
         List<Notes> allNotes = this.list(qW1);
         List<GetBriefNotesRequest> HomePageNotes = new ArrayList<GetBriefNotesRequest>();
-        for(int i=(index-1)*12; i<
-                index*12; i++) {
+        for(int i = (index-1)*12; i < index*12; i++) {
             if(i >= allNotes.size()) {
                 break;
             }
@@ -87,9 +86,10 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
             getBriefNotesRequest.setId(note.getId());
             getBriefNotesRequest.setTitle(note.getTitle());
             getBriefNotesRequest.setLikes(note.getLikes());
+            String useraccount = note.getUserAccount();
+            getBriefNotesRequest.setUserAccount(useraccount);
 
             //从user获取头像url和用户名
-            String useraccount = note.getUserAccount();
             QueryWrapper<Users> qW2 = new QueryWrapper<>();
             qW2.eq("userAccount", useraccount);
             Users user = usersService.getOne(qW2);
@@ -141,9 +141,10 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
             getBriefNotesRequest.setId(note.getId());
             getBriefNotesRequest.setTitle(note.getTitle());
             getBriefNotesRequest.setLikes(note.getLikes());
+            String useraccount = note.getUserAccount();
+            getBriefNotesRequest.setUserAccount(useraccount);
 
             //从user获取头像url和用户名
-            String useraccount = note.getUserAccount();
             QueryWrapper<Users> qW2 = new QueryWrapper<>();
             qW2.eq("userAccount", useraccount);
             Users user = usersService.getOne(qW2);
@@ -190,13 +191,14 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         GetDetailedNotesRequest Request = new GetDetailedNotesRequest();
         Request.setPostContent(note.getContent());
         Request.setPostTitle(note.getTitle());
+        String useraccount = note.getUserAccount();
+        Request.setUserAccount(useraccount);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedTime = sdf.format(note.getUploadTime());
         Request.setPostTime(formattedTime);
 
         //获取用户头像和名称
-        String useraccount = note.getUserAccount();
         QueryWrapper<Users> qW2 = new QueryWrapper<>();
         qW2.eq("userAccount", useraccount);
         Users user = usersService.getOne(qW2);

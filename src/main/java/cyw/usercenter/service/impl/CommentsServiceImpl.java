@@ -88,6 +88,7 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments>
             if(user != null){
                 request.setName(user.getUsername());
                 request.setAvatarUrl(user.getAvatarUrl());
+                request.setUserAccount(user.getUserAccount());
             }
             commentlist.add(request);
 

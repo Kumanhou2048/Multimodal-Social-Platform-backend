@@ -10,4 +10,5 @@ public class GetBriefNotesRequest {
     private String title;
     private String username;
     private int likes;
+    private String userAccount;
 }

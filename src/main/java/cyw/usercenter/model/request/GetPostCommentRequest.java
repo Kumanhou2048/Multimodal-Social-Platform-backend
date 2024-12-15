@@ -10,5 +10,6 @@ public class GetPostCommentRequest {
     String name;
     String content;
     String time;
+    String userAccount;
 
 }

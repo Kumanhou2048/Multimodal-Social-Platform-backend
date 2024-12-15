@@ -11,5 +11,6 @@ public class GetDetailedNotesRequest {
     String postTime;
     String postTitle;
     String postContent;
+    String userAccount;
 
 }
