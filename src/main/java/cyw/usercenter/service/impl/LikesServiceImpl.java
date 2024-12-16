@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cyw.usercenter.model.domain.Likes;
 import cyw.usercenter.model.domain.Notes;
 import cyw.usercenter.model.domain.Users;
+import cyw.usercenter.model.request.GetLikePostsIDResponse;
 import cyw.usercenter.model.request.PostLikesResponse;
 import cyw.usercenter.service.LikesService;
 import cyw.usercenter.Mapper.LikesMapper;
@@ -36,23 +37,24 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
     public PostLikesResponse PostLikes(int userId, int postId, boolean liked) {
         PostLikesResponse response = new PostLikesResponse();
         boolean result;
+        //检查user和post是否存在
+        QueryWrapper<Notes> qW1 = new QueryWrapper<>();
+        qW1.eq("id", postId);
+        Notes notes = notesService.getOne(qW1);
+        if(notes == null) {
+            response.setStatus("other");
+            return response;
+        }
+
+        QueryWrapper<Users> qW2 = new QueryWrapper<>();
+        qW2.eq("id", userId);
+        Users users = usersService.getOne(qW2);
+        if(users == null) {
+            response.setStatus("other");
+            return response;
+        }
+
         if(liked) {
-            QueryWrapper<Notes> qW1 = new QueryWrapper<>();
-            qW1.eq("id", postId);
-            Notes notes = notesService.getOne(qW1);
-            if(notes == null) {
-                response.setStatus("other");
-                return response;
-            }
-
-            QueryWrapper<Users> qW2 = new QueryWrapper<>();
-            qW2.eq("id", userId);
-            Users users = usersService.getOne(qW2);
-            if(users == null) {
-                response.setStatus("other");
-                return response;
-            }
-
             QueryWrapper<Likes> qW3 = new QueryWrapper<>();
             qW3.eq("userId", userId);
             qW3.eq("noteId", postId);
@@ -67,12 +69,19 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
             likes.setNoteId(postId);
             likes.setUploadTime(new Date());
             result = this.save(likes);
+
+            //更新notes表里的likes
+            notes.setLikes(notes.getLikes() + 1);
+            notesService.saveOrUpdate(notes);
         }
         else {
             QueryWrapper<Likes> qW3 = new QueryWrapper<>();
             qW3.eq("userId", userId);
             qW3.eq("noteId", postId);
             result = this.remove(qW3);
+
+            notes.setLikes(notes.getLikes() - 1);
+            notesService.saveOrUpdate(notes);
         }
 
         if(result){
@@ -84,7 +93,7 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
         return response;
     }
 
-    public List<Integer> getLikePostsID(int userid) {
+    public GetLikePostsIDResponse getLikePostsID(int userid) {
         List<Integer> likesPostsID = new ArrayList<Integer>();
         QueryWrapper<Likes> qW= new QueryWrapper<>();
         qW.eq("userId", userid);
@@ -92,7 +101,9 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
         for(Likes like : list){
             likesPostsID.add(like.getNoteId());
         }
-        return likesPostsID;
+        GetLikePostsIDResponse response = new GetLikePostsIDResponse();
+        response.setPostID(likesPostsID);
+        return response;
 
     }
 }

@@ -2,6 +2,7 @@ package cyw.usercenter.service;
 
 import cyw.usercenter.model.domain.Likes;
 import com.baomidou.mybatisplus.extension.service.IService;
+import cyw.usercenter.model.request.GetLikePostsIDResponse;
 import cyw.usercenter.model.request.PostLikesResponse;
 
 import java.util.List;
@@ -14,5 +15,5 @@ import java.util.List;
 public interface LikesService extends IService<Likes> {
     PostLikesResponse PostLikes(int userId, int postId, boolean liked);
 
-    List<Integer> getLikePostsID(int userid);
+    GetLikePostsIDResponse getLikePostsID(int userid);
 }

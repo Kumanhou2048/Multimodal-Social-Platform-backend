@@ -1,6 +1,7 @@
 package cyw.usercenter.controller;
 
 
+import cyw.usercenter.model.request.GetLikePostsIDResponse;
 import cyw.usercenter.model.request.PostLikesRequest;
 import cyw.usercenter.model.request.PostLikesResponse;
 import cyw.usercenter.model.request.simpleRequest;
@@ -27,7 +28,7 @@ public class LikesController {
     }
 
     @PostMapping("/getLikePostsID")
-    public List<Integer> getLikePostsID(@RequestBody simpleRequest request) {
+    public GetLikePostsIDResponse getLikePostsID(@RequestBody simpleRequest request) {
         int userid = request.getId();
         return likesService.getLikePostsID(userid);
     }
