@@ -15,5 +15,5 @@ import java.util.List;
 public interface LikesService extends IService<Likes> {
     PostLikesResponse PostLikes(int userId, int postId, boolean liked);
 
-    GetLikePostsIDResponse getLikePostsID(int userid);
+    List<GetLikePostsIDResponse> getLikePostsID(int userid);
 }

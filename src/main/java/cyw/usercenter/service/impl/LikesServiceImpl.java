@@ -93,17 +93,17 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
         return response;
     }
 
-    public GetLikePostsIDResponse getLikePostsID(int userid) {
-        List<Integer> likesPostsID = new ArrayList<Integer>();
+    public List<GetLikePostsIDResponse> getLikePostsID(int userid) {
+        List<GetLikePostsIDResponse> likesPostsID = new ArrayList<>();
         QueryWrapper<Likes> qW= new QueryWrapper<>();
         qW.eq("userId", userid);
         List<Likes> list = this.list(qW);
         for(Likes like : list){
-            likesPostsID.add(like.getNoteId());
+            GetLikePostsIDResponse response = new GetLikePostsIDResponse();
+            response.setPostID(like.getNoteId());
+            likesPostsID.add(response);
         }
-        GetLikePostsIDResponse response = new GetLikePostsIDResponse();
-        response.setPostID(likesPostsID);
-        return response;
+        return likesPostsID;
 
     }
 }

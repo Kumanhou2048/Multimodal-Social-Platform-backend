@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class GetLikePostsIDResponse {
-    List<Integer> PostID;
+    int PostID;
 }

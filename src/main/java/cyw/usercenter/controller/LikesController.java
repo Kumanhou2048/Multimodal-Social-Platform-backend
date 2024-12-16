@@ -28,7 +28,7 @@ public class LikesController {
     }
 
     @PostMapping("/getLikePostsID")
-    public GetLikePostsIDResponse getLikePostsID(@RequestBody simpleRequest request) {
+    public List<GetLikePostsIDResponse> getLikePostsID(@RequestBody simpleRequest request) {
         int userid = request.getId();
         return likesService.getLikePostsID(userid);
     }
