@@ -191,6 +191,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         GetDetailedNotesRequest Request = new GetDetailedNotesRequest();
         Request.setPostContent(note.getContent());
         Request.setPostTitle(note.getTitle());
+        Request.setLike(note.getLikes());
         String useraccount = note.getUserAccount();
         Request.setUserAccount(useraccount);
 

@@ -12,5 +12,5 @@ public class GetDetailedNotesRequest {
     String postTitle;
     String postContent;
     String userAccount;
-
+    int like;
 }
