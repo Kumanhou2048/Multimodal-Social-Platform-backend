@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cyw.usercenter.model.domain.Images;
 import cyw.usercenter.service.ImagesService;
-import cyw.usercenter.Mapper.ImagesMapper;
+import cyw.usercenter.mapper.ImagesMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cyw.usercenter.model.domain.Users;
 import cyw.usercenter.model.request.ManagePageUserInfo;
 import cyw.usercenter.service.UsersService;
-import cyw.usercenter.Mapper.UsersMapper;
+import cyw.usercenter.mapper.UsersMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

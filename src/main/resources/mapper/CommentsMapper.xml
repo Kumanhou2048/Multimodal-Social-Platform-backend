@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cyw.usercenter.Mapper.CommentsMapper">
+<mapper namespace="cyw.usercenter.mapper.CommentsMapper">
 
     <resultMap id="BaseResultMap" type="cyw.usercenter.model.domain.Comments">
             <id property="id" column="id" jdbcType="INTEGER"/>

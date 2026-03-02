@@ -1,4 +1,4 @@
-package cyw.usercenter.Mapper;
+package cyw.usercenter.mapper;
 
 import cyw.usercenter.model.domain.UserFollows;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

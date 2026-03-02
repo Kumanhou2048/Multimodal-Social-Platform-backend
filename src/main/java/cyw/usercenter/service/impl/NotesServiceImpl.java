@@ -10,13 +10,12 @@ import cyw.usercenter.model.request.GetBriefNotesRequest;
 import cyw.usercenter.model.request.GetDetailedNotesRequest;
 import cyw.usercenter.service.ImagesService;
 import cyw.usercenter.service.NotesService;
-import cyw.usercenter.Mapper.NotesMapper;
+import cyw.usercenter.mapper.NotesMapper;
 import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

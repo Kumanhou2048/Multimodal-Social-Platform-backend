@@ -8,7 +8,7 @@ import cyw.usercenter.model.domain.Users;
 import cyw.usercenter.model.request.GetLikePostsIDResponse;
 import cyw.usercenter.model.request.PostLikesResponse;
 import cyw.usercenter.service.LikesService;
-import cyw.usercenter.Mapper.LikesMapper;
+import cyw.usercenter.mapper.LikesMapper;
 import cyw.usercenter.service.NotesService;
 import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;

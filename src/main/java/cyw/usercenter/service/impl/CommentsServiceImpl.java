@@ -7,7 +7,7 @@ import cyw.usercenter.model.domain.Notes;
 import cyw.usercenter.model.domain.Users;
 import cyw.usercenter.model.request.GetPostCommentRequest;
 import cyw.usercenter.service.CommentsService;
-import cyw.usercenter.Mapper.CommentsMapper;
+import cyw.usercenter.mapper.CommentsMapper;
 import cyw.usercenter.service.NotesService;
 import cyw.usercenter.service.UsersService;
 import jakarta.annotation.Resource;
