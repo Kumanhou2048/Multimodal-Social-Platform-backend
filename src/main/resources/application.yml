@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/project
     username: root
-    password: cyw041127
+    password: Qazwsx62770778
 
   servlet:
     multipart:
@@ -25,4 +25,4 @@ mybatis-plus:
 
 files:
   uploads:
-    path: C:\Users\czl\WebstormProjects\frontend\public\avatar\
+    path: D:\C++\project\Graduation Project\frontend\public\avatar\
