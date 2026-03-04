@@ -7,5 +7,4 @@ public class PostLikesRequest {
     private int userID;
     private int postID;
     private boolean status;
-
 }

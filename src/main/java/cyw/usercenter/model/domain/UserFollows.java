@@ -1,40 +1,24 @@
 package cyw.usercenter.model.domain;
 
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 import java.time.LocalDateTime;
 
-import lombok.Data;
-
-/**
- *
- * @TableName user_follows
- */
-@TableName(value ="user_follows")
 @Data
+@TableName("user_follows")
 public class UserFollows {
-    /**
-     * 编号
-     */
+
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    /**
-     * 关注者id
-     */
-    private String follower_id;
+    // 必须加这个注解！告知数据库列名带下划线
+    @TableField("follower_account")
+    private String followerAccount;
 
-    /**
-     * 被关注者id
-     */
-    private String following_id;
+    // 必须加这个注解！告知数据库列名带下划线
+    @TableField("following_account")
+    private String followingAccount;
 
-    /**
-     * 关注时间
-     */
-    private LocalDateTime create_time;
+    @TableField("create_time")
+    private LocalDateTime createTime;
 }
