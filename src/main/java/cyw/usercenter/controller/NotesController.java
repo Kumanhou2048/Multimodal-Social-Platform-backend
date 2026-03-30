@@ -1,15 +1,16 @@
 package cyw.usercenter.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import cyw.usercenter.model.domain.Notes;
 import cyw.usercenter.model.request.*;
 import cyw.usercenter.service.NotesService;
+import cyw.usercenter.service.AiEmbeddingService;
+import cyw.usercenter.service.RedisVectorStore;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -29,6 +30,7 @@ public class NotesController {
         int noteType = noteUploadRequest.getNoteType();
         int imagecount = noteUploadRequest.getImageCount();
         List<String> imageUrl = noteUploadRequest.getImageUrls();
+        boolean isAiGenerated = noteUploadRequest.getIsAiGenerated();
 
         if(StringUtils.isAnyBlank(useraccount, title)){
             return -2;//缺少必要字段
@@ -40,7 +42,22 @@ public class NotesController {
             return -4;//内容长度超过500！
         }
 
-        int id = notesService.setNewNote(useraccount, title, content, noteType, imagecount, imageUrl);
+        int id = notesService.setNewNote(useraccount, title, content, noteType, imagecount, imageUrl,isAiGenerated);
+        if (id > 0) {
+            // 异步处理，不阻塞主流程
+            CompletableFuture.runAsync(() -> {
+                // 取出第一张图片的 Base64
+                String firstImgBase64 = (imageUrl != null && !imageUrl.isEmpty()) ? imageUrl.get(0) : "";
+
+                if (!firstImgBase64.isEmpty()) {
+                    float[] vector = AiEmbeddingService.getPostEmbedding(firstImgBase64, content);
+                    if (vector != null) {
+                        // 存入 RedisStack 数据库
+                        RedisVectorStore.saveVector(id, vector);
+                    }
+                }
+            });
+        }
         if(id == -1){
             return -5;//"保存失败！"
         }

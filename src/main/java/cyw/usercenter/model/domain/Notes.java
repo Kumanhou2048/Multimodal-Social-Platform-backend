@@ -75,6 +75,9 @@ public class Notes implements Serializable {
      */
     private Integer comments;
 
+    @TableField("is_ai_generated")
+    private Boolean isAiGenerated;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -26,3 +26,6 @@ mybatis-plus:
 files:
   uploads:
     path: D:\C++\project\Graduation Project\frontend\public\avatar\
+
+ai:
+  embedding-service-url: http://localhost:9000/get_vector

@@ -34,7 +34,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
 
 
     @Override
-    public int setNewNote(String useraccount, String title, String content, int noteType, int imageCount, List<String> imageUrl) {
+    public int setNewNote(String useraccount, String title, String content, int noteType, int imageCount, List<String> imageUrl, boolean isAiGenerated) {
         Notes note = new Notes();
         note.setUserAccount(useraccount); // 设置用户账号
         note.setUploadTime(new Date()); // 使用当前时间作为上传时间示例
@@ -46,6 +46,7 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         note.setLikes(0); // 初始点赞数设为0
         note.setCollection(0); // 初始收藏数设为0
         note.setComments(0); // 初始评论数设为0
+        note.setIsAiGenerated(isAiGenerated);
 
         boolean result = this.save(note);
         int noteId;
@@ -208,6 +209,8 @@ public class NotesServiceImpl extends ServiceImpl<NotesMapper, Notes>  implement
         }
         Request.setPosterName(user.getUsername());
         Request.setPosterAvatarUrl(user.getAvatarUrl());
+
+        Request.setAiGenerated(note.getIsAiGenerated());
 
         return Request;
     }

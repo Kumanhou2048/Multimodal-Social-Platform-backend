@@ -13,4 +13,5 @@ public class GetDetailedNotesRequest {
     String postContent;
     String userAccount;
     int like;
+    boolean isAiGenerated;
 }

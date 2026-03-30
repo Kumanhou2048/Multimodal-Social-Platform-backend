@@ -28,6 +28,7 @@ public class UserFollowsController {
     @Resource
     private UserFollowsService userFollowService;
 
+    //关注用户
     @PostMapping("/Follows")
     public Result doFollow(@RequestBody FollowRequest request) {
         String followerAccount = request.getFollowerAccount();
@@ -37,6 +38,7 @@ public class UserFollowsController {
         return Result.success(result ? "关注成功" : "已取消关注");
     }
 
+    //获取粉丝（仅account
     @PostMapping("/getFollowers")
     public Result getFollow(@RequestBody GetFollowResponse request) {
         String userid = request.getAccount();
@@ -44,6 +46,7 @@ public class UserFollowsController {
         return Result.success(list);
     }
 
+    //获取关注（仅account
     @PostMapping("/getFollowings")
     public Result getFollowings(@RequestBody GetFollowResponse request) {
         System.out.println("前端传来的账号是: " + request.getAccount());

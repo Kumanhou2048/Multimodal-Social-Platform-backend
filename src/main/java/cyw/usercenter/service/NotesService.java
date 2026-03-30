@@ -14,7 +14,7 @@ import java.util.List;
 */
 public interface NotesService extends IService<Notes> {
 
-     int setNewNote(String useraccount, String title, String content, int noteType, int imagecount, List<String> imageUrl);
+     int setNewNote(String useraccount, String title, String content, int noteType, int imagecount, List<String> imageUrl, boolean isAiGenerated);
 
      List<GetBriefNotesRequest> getHomePageNotes(int index);
 
